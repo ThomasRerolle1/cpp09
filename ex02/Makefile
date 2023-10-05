@@ -2,13 +2,12 @@ NAME= PmergeMe
 
 SRCS=	main.cpp\
 	PmergeMe.cpp
-	
 
 OBJ= $(SRCS:%.cpp=%.o)
 
 CC= c++
 
-CFLAGS=	-Wall -Werror -Wextra -std=c++98
+CFLAGS=	-Wall -Werror -Wextra -std=c++98 -fsanitize=address -g3
 
 GREEN = \033[0;32m
 

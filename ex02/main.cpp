@@ -2,19 +2,20 @@
 
 int	main(int argc, char **argv)
 {
+	(void)argv;
 	if (argc < 2)
 	{
-		std::cout << "Too few arguments" << std::endl;
+		std::cout << "Too few arguments\n";
 		return (0);
 	}
-try
+	try
 	{
-		PmergeMe	sort(argv + 1, argc - 1);
-		sort.compareSmallAndMain();
-
+		PmergeMe	test(argc - 1, argv + 1);
 	}
 	catch (std::exception &e)
 	{
-		std::cout << e.what() <<std::endl;
+		std::cout << e.what() << std::endl;
 	}
+
+	return (0);
 }
