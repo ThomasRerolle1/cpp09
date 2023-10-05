@@ -6,7 +6,7 @@
 /*   By: trerolle <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:18:56 by trerolle          #+#    #+#             */
-/*   Updated: 2023/07/19 20:46:54 by trerolle         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:58:56 by trerolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ class	RPN
 		//functions
 		
 		std::stack<int> &	getRPN();
-		std::string	&	getExpression();
-		void			fillStack(char *str);
-		int				calculate(int n1, int n2, char ope);
+		std::string	&		getExpression();
+		void				fillStack(char *str);
+		int					calculate(int n1, int n2, char ope);
 
 		//exceptions
 		//

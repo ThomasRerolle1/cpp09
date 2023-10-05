@@ -6,7 +6,7 @@
 /*   By: trerolle <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:29:55 by trerolle          #+#    #+#             */
-/*   Updated: 2023/07/19 21:19:41 by trerolle         ###   ########.fr       */
+/*   Updated: 2023/10/05 15:06:07 by trerolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	std::stack<int>	r;
 	if (argc != 2)
 	{
-		std::cout << "Wrong number of arguments\n";
+		std::cout << "Error: RPN take 1 argument (e.g. \"8 9 * 9 - 9 - 9 - 4 - 1 +\")\n";
 		return (0);
 	}
 	RPN	rpn;
@@ -34,4 +34,3 @@ int main(int argc, char **argv)
 	}
 	
 }
-

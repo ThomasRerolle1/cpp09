@@ -39,13 +39,11 @@ void	PmergeMe::makeJacobSequence(void){
 
 void	PmergeMe::createPairVector(std::vector<int> container)
 {
-	int	first, second;
+	int							first, second;
 	std::vector<int>::iterator	itNext = container.begin() + 1;
 
 	for (std::vector<int>::iterator it = container.begin(); it != container.end(); ++it)
 	{
-		//std::cout << "for loop" << *it << std::endl;
-		//
 		if (itNext != container.end())
 		{
 			first = *it;
@@ -65,8 +63,8 @@ void	PmergeMe::createPairVector(std::vector<int> container)
 
 void	PmergeMe::insertPairVec(void)
 {
-	std::vector<int>::iterator			itMain = _mainVec.begin() + 1, itPrev = _mainVec.begin(), insertSmall;
-	std::vector<int>				tmp = _mainVec;
+	std::vector<int>::iterator					itMain = _mainVec.begin() + 1, itPrev = _mainVec.begin(), insertSmall;
+	std::vector<int>							tmp = _mainVec;
 	std::vector<std::pair<int, int> >::iterator	itPair;
 
 	_mainVec.insert(_mainVec.begin(), findPairBySecondElement(_pairVec, _mainVec[0])->first);
@@ -77,18 +75,14 @@ void	PmergeMe::insertPairVec(void)
 			_jacobsthalSequence[i] = tmp.size() - 1;
 		itMain = std::find(_mainVec.begin(), _mainVec.end(), tmp[_jacobsthalSequence[i]]);
 		itPrev = std::find(_mainVec.begin(), _mainVec.end(), tmp[_jacobsthalSequence[i - 1]]);
-		//std::cout << "prev tmp: " << tmp[_jacobsthalSequence[i - 1]] << std::endl;
 		if (itPrev == _mainVec.end())
-		{
-			std::cout << tmp[_jacobsthalSequence[i - 1]] << std::endl;
 			return ;
-		}
 		for (size_t nbElem = 0; _jacobsthalSequence[i] - nbElem != _jacobsthalSequence[i - 1]; nbElem++)
 		{
+			itMain = std::find(_mainVec.begin(), _mainVec.end(), tmp[_jacobsthalSequence[i] - nbElem]);
 			itPair = findPairBySecondElement(_pairVec, *itMain);
 			insertSmall = std::lower_bound(_mainVec.begin(), itMain + 1, itPair->first);
 			_mainVec.insert(insertSmall, itPair->first);
-			displayT(_mainVec);
 		}
 	}
 	itPair = findPairBySecondElement(_pairVec, -1);
@@ -98,30 +92,25 @@ void	PmergeMe::insertPairVec(void)
 
 void	PmergeMe::insertPairDeque(void)
 {
-	std::deque<int>::iterator			itMain = _mainDeque.begin() + 1, itPrev = _mainDeque.begin(), insertSmall;
-	std::deque<int>					tmp = _mainDeque;
+	std::deque<int>::iterator					itMain = _mainDeque.begin() + 1, itPrev = _mainDeque.begin(), insertSmall;
+	std::deque<int>								tmp = _mainDeque;
 	std::deque<std::pair<int, int> >::iterator	itPair;
 
 	_mainDeque.insert(_mainDeque.begin(), findPairBySecondElement(_pairDeque, _mainDeque[0])->first);
-
 	for (size_t i = 1; i < _jacobsthalSequence.size() && _mainDeque.size() != 2; i++)
 	{
 		if (_jacobsthalSequence[i] > tmp.size())
 			_jacobsthalSequence[i] = tmp.size() - 1;
 		itMain = std::find(_mainDeque.begin(), _mainDeque.end(), tmp[_jacobsthalSequence[i]]);
 		itPrev = std::find(_mainDeque.begin(), _mainDeque.end(), tmp[_jacobsthalSequence[i - 1]]);
-		//std::cout << "prev tmp: " << tmp[_jacobsthalSequence[i - 1]] << std::endl;
 		if (itPrev == _mainDeque.end())
-		{
-			std::cout << tmp[_jacobsthalSequence[i - 1]] << std::endl;
 			return ;
-		}
 		for (size_t nbElem = 0; _jacobsthalSequence[i] - nbElem != _jacobsthalSequence[i - 1]; nbElem++)
 		{
+			itMain = std::find(_mainDeque.begin(), _mainDeque.end(), tmp[_jacobsthalSequence[i] - nbElem]);
 			itPair = findPairBySecondElement(_pairDeque, *itMain);
 			insertSmall = std::lower_bound(_mainDeque.begin(), itMain + 1, itPair->first);
 			_mainDeque.insert(insertSmall, itPair->first);
-			displayT(_mainDeque);
 		}
 	}
 	itPair = findPairBySecondElement(_pairDeque, -1);
@@ -136,8 +125,6 @@ void	PmergeMe::createPairDeque(std::deque<int> container)
 
 	for (std::deque<int>::iterator it = container.begin(); it != container.end(); ++it)
 	{
-		//std::cout << "for loop" << *it << std::endl;
-		//
 		if (itNext != container.end())
 		{
 			first = *it;
@@ -158,60 +145,73 @@ void	PmergeMe::createPairDeque(std::deque<int> container)
 
 void	PmergeMe::sortVector(char **argv)
 {
-	time_t	start, end;
+	std::clock_t	timePast;
 	int	i = 0;
 	std::vector<int>	container;
-	(void)argv;
 
-	time(&start);
+	timePast = clock();
 	while (argv[i])
 	{
 		if (std::find(container.begin(), container.end(), atoi(argv[i])) != container.end())
 			throw PmergeMe::BadArguments();
 		container.push_back(atoi(argv[i++]));
 	}
-	createPairVector(container);
-	mergeInsertion(_mainVec);
-	insertPairVec();
-	time(&end);
-	double	timePast = (end - start);
-	std::cout << "Time taken by program is : " <<
-		std::fixed << timePast << std::setprecision(5) << " sec " << std::endl;
+	if (_elemCount > 1)
+	{
+		createPairVector(container);
+		mergeInsertion(_mainVec);
+		insertPairVec();
+	}
+	else
+		_mainVec = container;
+	std::cout << "Vector:\t";
+	displayT(_mainVec);
+	timePast = clock() - timePast;
+	std::cout << "Time to process a range of " << _elemCount << " elements with std::vector: " << (timePast / (CLOCKS_PER_SEC / 1000000)) << " usec " << std::endl;
 }
 
 void	PmergeMe::sortDeque(char **argv)
 {
+	std::clock_t	timePast;
 	int	i = 0;
 	std::deque<int>	container;
+	
+	timePast = clock();
 	while (argv[i])
 	{
 		if (std::find(container.begin(), container.end(), atoi(argv[i])) != container.end())
 			throw PmergeMe::BadArguments();
 		container.push_back(atoi(argv[i++]));
 	}
+	std::cout << "\nBefore:\t";
 	displayT(container);
-	createPairDeque(container);
+	if (_elemCount > 1)
+	{
+		createPairDeque(container);
+		mergeInsertion(_mainDeque);
+		insertPairDeque();
+	}
+	else
+		_mainDeque = container;
+	std::cout << "\nDeque:\t";
 	displayT(_mainDeque);
-	mergeInsertion(_mainDeque);
-	insertPairDeque();
-	displayT(_mainDeque);
+	timePast = clock() - timePast;
+	std::cout << "Time to process a range of " << _elemCount << " elements with std::deque: " << (timePast / (CLOCKS_PER_SEC / 1000000)) << " usec " << std::endl;
 
 	
 }
 
 PmergeMe::PmergeMe(int argc, char **argv): _elemCount(argc){
-	(void)argv;
 	checkArgs(argv);
-	if (argc == 1)
-	{
-		_mainVec.push_back(atoi(argv[0]));
-		displayT(_mainVec);
-		return ;
-	}
 	makeJacobSequence();
-	//sortVector(argv);
 	sortDeque(argv);
-	//sortList(argv);
+	if (std::is_sorted(_mainDeque.begin(), _mainDeque.end()))
+			std::cout << "DEQUE IS SORTED" << std::endl;
+	std::cout << std::endl;
+	sortVector(argv);
+	if (std::is_sorted(_mainVec.begin(), _mainVec.end()))
+			std::cout << "VECTOR IS SORTED" << std::endl;
+	std::cout << std::endl;
 }
 
 PmergeMe::~PmergeMe() {
@@ -224,173 +224,3 @@ PmergeMe const &	PmergeMe::operator=(PmergeMe const &rhs){
 	//Operator implementation
 	return (*this);
 }
-
-
-// Other member function implementations
-
-/*
-void	PmergeMe::createPairList(std::list<int> container)
-{
-	int	first, second;
-	std::list<int>::iterator	itNext = container.begin();
-
-	itNext++;
-
-	for (std::list<int>::iterator it = container.begin(); it != container.end(); ++it)
-	{
-		//std::cout << "for loop" << *it << std::endl;
-		//
-		if (itNext != container.end())
-		{
-			first = *it;
-			second = *itNext;
-			if (first > second)
-				swap(first, second);
-			_pairLst.push_back(std::make_pair(first, second));
-			_mainLst.push_back(second);
-			++it;
-			itNext++;
-			itNext++;
-		}
-		else
-			_pairLst.push_back(std::make_pair(*it, -1));
-	}	
-}
-
-void insertLst(std::list<int>& myList) {
-    for (std::list<int>::iterator i = myList.begin(); i != myList.end(); ++i) {
-        std::list<int>::iterator current = i;
-        int key = *i;
-        
-        while (current != myList.begin() && *(--current) > key) {
-            std::list<int>::iterator next = current;
-            ++next;
-            *next = *current;
-        }
-        
-        std::list<int>::iterator next = current;
-        ++next;
-        *next = key;
-    }
-}
-
-void	mergeLst(std::list<int> &container, std::list<int> &left, std::list<int> &right)
-{
-	std::list<int>::iterator	itL = left.begin(), itR = right.begin();
-
-	container.clear();
-	while (itL != left.end() && itR != right.end())
-	{
-		if (*itL <= *itR)
-		{
-			container.push_back(*itL);
-			++itL;
-		}
-		else
-		{
-			container.push_back(*itR);
-			++itR;
-		}
-	}
-	while (itL != left.end())
-	{
-		container.push_back(*itL);
-		++itL;
-	}
-	while (itR != right.end())
-	{
-		container.push_back(*itR);
-		++itR;
-	}
-}
-
-std::list<int>	splitList(std::list<int> container, size_t start, size_t end)
-{
-	std::list<int>			lst;
-	std::list<int>::iterator	it;
-	size_t				i = 0;
-	
-	while (it != container.end() && i != start)
-	{
-		++it;
-		i++;
-	}
-	while (it != container.end() && i < end)
-	{
-		lst.push_back(*it);
-		++it;
-		i++;
-	}
-	return (lst);
-}
-
-
-void	mergeInsertionLst(std::list<int> &container)
-{
-	if (container.size() <= threshold)
-	{
-		insertLst(container);
-		return ;
-	}
-	std::list<int>	left, right;
-	left = splitList(container, 0, container.size() / 2);
-	right = splitList(container, container.size() / 2, container.size());
-
-	mergeInsertionLst(left);
-	mergeInsertionLst(right);
-	mergeLst(container, left, right);
-}
-
-
-
-
-
-void	PmergeMe::sortList(char **argv)
-{
-	time_t	start, end;
-	int	i = 0;
-	std::list<int>	container;
-
-	time(&start);
-	while (argv[i])
-	{
-		if (std::find(container.begin(), container.end(), atoi(argv[i])) != container.end())
-			throw PmergeMe::BadArguments();
-		container.push_back(atoi(argv[i++]));
-	}
-	displayT(container);
-
-	std::cout << "coucou\n";
-	createPairList(container);
-	displayT(_mainLst);
-	mergeInsertionLst(_mainLst);
-	displayT(_mainLst);
-	time(&end);
-	double	timePast = (end - start);
-	std::cout << "Time taken by program is : " <<
-		std::fixed << timePast << std::setprecision(5) << " sec " << std::endl;
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

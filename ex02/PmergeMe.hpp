@@ -1,6 +1,6 @@
 #ifndef PmergeMe_HPP
 #define PmergeMe_HPP
-#define threshold 2
+#define threshold 10
 
 #include <algorithm>
 #include <iostream>
@@ -53,7 +53,7 @@ class PmergeMe {
 			int	i = 0;
 			for (typename T::iterator it = container.begin(); it != container.end(); ++it)
 			{
-				if (i == 6)
+				if  (i == 4)
 				{
 					std::cout << " [...]";
 					break ;
@@ -141,18 +141,16 @@ class PmergeMe {
 		{
 			public:
 				virtual const char *what() const throw(){
-					return ("Bad input: must contain only positive integers");
+					return ("Bad input: must contain only positive integers and no duplicate values");
 				}
 		};
 	private:
-		size_t					_elemCount;
-		std::vector<int>			_mainVec;
+		size_t								_elemCount;
+		std::vector<int>					_mainVec;
 		std::vector<std::pair<int, int> >	_pairVec;
-		std::deque<int>				_mainDeque;
+		std::deque<int>						_mainDeque;
 		std::deque<std::pair<int, int> >	_pairDeque;
-		std::vector<size_t>			_jacobsthalSequence;
-		std::list<int>				_mainLst;
-		std::list<std::pair<int, int> >		_pairLst;
+		std::vector<size_t>					_jacobsthalSequence;
 
 };
 

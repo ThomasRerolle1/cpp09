@@ -6,7 +6,7 @@
 /*   By: trerolle <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:31:59 by trerolle          #+#    #+#             */
-/*   Updated: 2023/07/19 21:43:35 by trerolle         ###   ########.fr       */
+/*   Updated: 2023/10/05 15:09:19 by trerolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	RPN::fillStack(char *str)
 {
 	int			n, nb_operand, nb_operators;
 	std::string	ope = "+*/-";
+	
 	nb_operand = nb_operators = 0;
-
 	for (size_t i  = 0; i < strlen(str); i++)
 	{
 		if (isdigit(str[i]))
@@ -89,9 +89,7 @@ void	RPN::fillStack(char *str)
 				throw RPN::BadInput();
 			n = _rpn.top();
 			_rpn.pop();
-			//std::cout << _rpn.top() << " " << str[i] << " " << n ;
 			_rpn.top() = calculate(_rpn.top(), n, str[i]);
-			//std::cout << " = " << _rpn.top() << std::endl;
 		}
 		else if (str[i] == ' ')
 			continue ;
@@ -101,13 +99,3 @@ void	RPN::fillStack(char *str)
 	if (nb_operators + 1 != nb_operand)
 		throw RPN::BadInput();
 }
-
-
-
-
-		/*bool	isDigit(char c);
-		bool	isOperator(char c);
-		void	insertInStack();
-		void	displayResult() const;*/
-		
-

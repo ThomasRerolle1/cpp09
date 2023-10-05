@@ -6,7 +6,7 @@
 /*   By: trerolle <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:50:34 by trerolle          #+#    #+#             */
-/*   Updated: 2023/07/19 18:55:55 by trerolle         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:57:19 by trerolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,15 @@ void	BitcoinExchange::displayBTC(std::string file) const
 void	BitcoinExchange::bitcoinConvertor(std::string date, double value) const
 {
 	std::map<std::string, double>::const_iterator	it;
+
 	if (_data.empty())
 		return ;	
 	it = _data.find(date);
 	if (it == _data.end())
 	{
 		it = _data.lower_bound(date);
-		--it;
+		if (it != _data.begin())
+			--it;
 	}
 	if (it == _data.end())
 		throw BitcoinExchange::BadDateException();
